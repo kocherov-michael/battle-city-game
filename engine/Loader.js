@@ -52,9 +52,9 @@
 
 				const promise = Loader
 					.loadJson(address)
-					.then(image => {
+					.then(json => {
 						// добавляем json в базу
-						this.resources.jsons[name] = image
+						this.resources.jsons[name] = json
 
 						// удаляем json из очереди загрузки
 						if (this.loadOrder.jsons.includes(jsonData)) {
