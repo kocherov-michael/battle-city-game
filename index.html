@@ -16,13 +16,19 @@
 		loader.addImage('animal', 'static/animal.jpg')
 		loader.addImage('monkey', 'static/monkey.jpg')
 		loader.addJson('persons', 'static/persons.json')
+		loader.addJson('animals', 'static/animals.json')
 
 		loader.load((data) => {
+			// выводим изображения на страницу
 			const imgArr = loader.resources.images
 			for (image in imgArr) {
 				document.body.append(imgArr[image])
 			}
-			console.log(loader.resources.jsons.persons)
+			// выводим json в консоль
+			const jsonArr = loader.resources.jsons
+			for (name in jsonArr) {
+				console.log(name, ':', jsonArr[name])
+			}
 		})
 
 		// Loader.loadImage('static/animal.jpg').then(image => {

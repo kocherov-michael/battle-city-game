@@ -1,13 +1,13 @@
 [
 	{
 		"id": 1,
-		"name": "Сурикат",
-		"place": "Fuengirola, Spain"
+		"name": "Алексей",
+		"age": 27
 	},
 
 	{
 		"id": 2,
-		"name": "Обезьяна",
-		"age": "Gibraltar"
+		"name": "Пётр",
+		"age": 18
 	}
 ]
