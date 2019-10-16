@@ -14,16 +14,21 @@
 		const loader = new Loader
 
 		loader.addImage('animal', 'static/animal.jpg')
+		loader.addImage('monkey', 'static/monkey.jpg')
 		loader.addJson('persons', 'static/persons.json')
 
-		loader.load(() => {
-			console.log('load ready')
+		loader.load((data) => {
+			const imgArr = loader.resources.images
+			for (image in imgArr) {
+				document.body.append(imgArr[image])
+			}
+			console.log(loader.resources.jsons.persons)
 		})
 
-		Loader.loadImage('static/animal.jpg').then(image => {
-			console.log(image)
-			document.body.append(image)
-		})
+		// Loader.loadImage('static/animal.jpg').then(image => {
+		// 	console.log(image)
+		// 	document.body.append(image)
+		// })
 	</script>
 </body>
 </html>
