@@ -13,6 +13,7 @@
 			this.canvas.height = args.height || 50
 			this.update = args.update || (() => {})
 
+			// экземпляр класса Container
 			this.stage = new GameEngine.Container()
 
 			requestAnimationFrame(timestamp => this.tick(timestamp))

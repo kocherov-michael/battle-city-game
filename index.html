@@ -7,6 +7,7 @@
 	<title>Document</title>
 </head>
 <body>
+	<script src="engine/DisplayObject.js"></script>
 	<script src="engine/Container.js"></script>
 	<script src="engine/Loader.js"></script>
 	<script src="engine/Renderer.js"></script>
@@ -16,8 +17,10 @@
 		// вытаскиваем классы из GameEngine
 		const { Loader, Renderer, Sprite, Container } = GameEngine
 
-		let sprite = null
-		let monkey = null
+		let sprite1 = null
+		let sprite2 = null
+		let container = null
+		// let monkey = null
 
 		const loader = new Loader
 		const renderer = new Renderer({
@@ -26,18 +29,25 @@
 			background : 'gray',
 
 			update (timestamp) {
-				if (sprite) {
-					sprite.x = renderer.canvas.width / 2 + 100 * Math.cos(timestamp / 200)
-					sprite.y = renderer.canvas.height / 2 + 100 * Math.sin(timestamp / 200)
-					sprite.frame.x = sprite.texture.width / 2 + 100 * Math.cos(timestamp / 200)
-					sprite.frame.y = sprite.texture.height / 2 + 100 * Math.sin(timestamp / 200)
+				if (!sprite1) {
+					return
 				}
-				if (monkey) {
-					if ( monkey.x < renderer.canvas.width) {
-						monkey.x = timestamp / 20
-					}
+				container.rotation = timestamp / 1000
+				sprite1.rotation = -timestamp / 1000
+				// sprite2.rotation = -timestamp / 1000
 
-				}
+				// if (sprite) {
+					// sprite.x = renderer.canvas.width / 2 + 100 * Math.cos(timestamp / 200)
+					// sprite.y = renderer.canvas.height / 2 + 100 * Math.sin(timestamp / 200)
+					// sprite.frame.x = sprite.texture.width / 2 + 100 * Math.cos(timestamp / 200)
+					// sprite.frame.y = sprite.texture.height / 2 + 100 * Math.sin(timestamp / 200)
+				// }
+				// if (monkey) {
+				// 	if ( monkey.x < renderer.canvas.width) {
+				// 		monkey.x = timestamp / 20
+				// 	}
+
+				// }
 			}
 		})
 
@@ -52,30 +62,55 @@
 		loader.load(() => {
 			// выводим изображения на страницу
 			// стартовая инициализация спрайта
-			sprite = new Sprite(loader.getImage('animal'), {
+			sprite1 = new Sprite(loader.getImage('animal'), {
+				// x: renderer.canvas.width / 2,
+				x: 100,
+				y: 200,
+				// y: renderer.canvas.height / 2,
+				// rotation: Math.PI / 2,
 				scale: 0.25,
 				anchorX: 0.5,
 				anchorY: 0.5
 			})
 
-			const container = new Container()
+			sprite2 = new Sprite(loader.getImage('monkey'), {
+				// x: renderer.canvas.width / 2,
+				x: 400,
+				y: 200,
+				// y: renderer.canvas.height / 2,
+				// rotation: Math.PI / 2,
+				scale: 0.25,
+				anchorX: 0.5,
+				anchorY: 0.5
+			})
+
+			container = new Container()
+			container.x = 100
+			container.y = 100
+			// container.rotation = Math.PI / 4
+			container.anchorX = 0.5
+			container.anchorY = 0.5
+			container.width = renderer.canvas.width
+			container.height = renderer.canvas.height
+
 			renderer.stage.add(container)
-			container.add(sprite)
+			container.add(sprite1)
+			container.add(sprite2)
 
 			// задаём точку позиционирования
-			sprite.absoluteX = 0
-			sprite.absoluteY = 0
+			// sprite.absoluteX = 0
+			// sprite.absoluteY = 0
 
-			monkey = new Sprite(loader.getImage('monkey'), {
-				scale: 0.25,
-				anchorX: 0.5,
-				anchorY: 0.5
-			})
+			// monkey = new Sprite(loader.getImage('monkey'), {
+			// 	scale: 0.25,
+			// 	anchorX: 0.5,
+			// 	anchorY: 0.5
+			// })
 
-			container.add(monkey)
+			// container.add(monkey)
 
-			monkey.absoluteX = 50
-			monkey.absoluteY = 50
+			// monkey.absoluteX = 50
+			// monkey.absoluteY = 50
 
 		})
 
