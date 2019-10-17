@@ -63,9 +63,9 @@
 					}
 					else if (container.direction === 'rotationDown') {
 						container.angle = Math.PI / 2 * (timestamp - container.time) 
-						container.rotation = - container.angle / 1000
+						container.rotation = - container.angle / 500
 
-						if (container.angle / 1000 > Math.PI / 2) {
+						if (container.angle / 500 > Math.PI / 2) {
 							container.rotation = - Math.PI / 2
 							container.direction = 'down'
 							container.time = timestamp
@@ -81,9 +81,9 @@
 					} 
 					else if (container.direction === 'rotationLeft' ) {
 						container.angle = Math.PI / 2 * (timestamp - container.time)
-						container.rotation = - Math.PI / 2 - container.angle / 1000
+						container.rotation = - Math.PI / 2 - container.angle / 500
 
-						if ((Math.PI / 2 + container.angle / 1000) > Math.PI ) {
+						if ((Math.PI / 2 + container.angle / 500) > Math.PI ) {
 							container.rotation = - Math.PI
 							container.direction = 'left'
 							container.time = timestamp
@@ -99,8 +99,8 @@
 					}
 					else if (container.direction === 'rotationUp' ) {
 						container.angle = Math.PI / 2 * (timestamp - container.time)
-						container.rotation = - Math.PI - container.angle / 1000
-						if ((Math.PI + container.angle / 1000) > Math.PI * 1.5 ) {
+						container.rotation = - Math.PI - container.angle / 500
+						if ((Math.PI + container.angle / 500) > Math.PI * 1.5 ) {
 							container.rotation = - Math.PI * 1.5
 							container.direction = 'up'
 							container.time = timestamp
@@ -116,9 +116,9 @@
 					}
 					else if (container.direction === 'rotationRight' ) {
 						container.angle = Math.PI / 2 * (timestamp - container.time)
-						container.rotation = - Math.PI * 1.5 - container.angle / 1000
+						container.rotation = - Math.PI * 1.5 - container.angle / 500
 
-						if ((Math.PI * 1.5 + container.angle / 1000) > Math.PI * 2 ) {
+						if ((Math.PI * 1.5 + container.angle / 500) > Math.PI * 2 ) {
 							container.rotation = 0
 							container.direction = 'right'
 							container.time = timestamp
