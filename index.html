@@ -39,7 +39,7 @@
 				moveTanks(containerEnemy, timestamp)
 
 				// движение пули
-				if ( spriteBullet.x < renderer.canvas.width * 3) {
+				if ( spriteBullet.x < renderer.canvas.width * 2) {
 					spriteBullet.limit = spriteBullet.limit || 0
 					spriteBullet.x = (timestamp - spriteBullet.limit) /2
 				} else {
