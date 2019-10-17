@@ -17,100 +17,183 @@
 		// вытаскиваем классы из GameEngine
 		const { Loader, Renderer, Sprite, Container } = GameEngine
 
-		let sprite1 = null
-		let sprite2 = null
+		let spriteTank = null
+		let spriteEnemy = null
+		let spriteBullet = null
 		let container = null
-		// let monkey = null
+		let containerEnemy = null
+		let spriteBackground = null
 
 		const loader = new Loader
 		const renderer = new Renderer({
 			width: 500,
 			height: 500,
-			background : 'gray',
+			background : 'black',
 
 			update (timestamp) {
-				if (!sprite1) {
+				if (!spriteTank || !spriteEnemy || !spriteBullet) {
 					return
 				}
-				container.rotation = timestamp / 1000
-				sprite1.rotation = -timestamp / 1000
-				// sprite2.rotation = -timestamp / 1000
 
-				// if (sprite) {
-					// sprite.x = renderer.canvas.width / 2 + 100 * Math.cos(timestamp / 200)
-					// sprite.y = renderer.canvas.height / 2 + 100 * Math.sin(timestamp / 200)
-					// sprite.frame.x = sprite.texture.width / 2 + 100 * Math.cos(timestamp / 200)
-					// sprite.frame.y = sprite.texture.height / 2 + 100 * Math.sin(timestamp / 200)
-				// }
-				// if (monkey) {
-				// 	if ( monkey.x < renderer.canvas.width) {
-				// 		monkey.x = timestamp / 20
-				// 	}
+				moveTanks(container, timestamp)
+				moveTanks(containerEnemy, timestamp)
 
-				// }
+				// движение пули
+				if ( spriteBullet.x < renderer.canvas.width * 3) {
+					spriteBullet.limit = spriteBullet.limit || 0
+					spriteBullet.x = (timestamp - spriteBullet.limit) /2
+				} else {
+					spriteBullet.limit = timestamp
+					spriteBullet.x = 0
+				}
+
+				// движение контейнеров танков
+				function moveTanks(container, timestamp) {
+					container.direction = container.direction || 'right'
+					container.time = container.time || - container.x
+					const halfSize = container.height / 2
+
+					if (container.direction === 'right') {
+						container.x = (timestamp - container.time) / 5 + halfSize
+						
+						if (container.x >= renderer.canvas.width - halfSize) {
+							container.direction = 'rotationDown'
+							container.time = timestamp
+						}
+					}
+					else if (container.direction === 'rotationDown') {
+						container.angle = Math.PI / 2 * (timestamp - container.time) 
+						container.rotation = - container.angle / 1000
+
+						if (container.angle / 1000 > Math.PI / 2) {
+							container.rotation = - Math.PI / 2
+							container.direction = 'down'
+							container.time = timestamp
+						}
+					}
+					else if (container.direction === 'down') {
+						container.y = (timestamp - container.time) / 5 + halfSize
+
+						if (container.y >= renderer.canvas.height - halfSize) {
+							container.time = timestamp
+							container.direction = 'rotationLeft'
+						}
+					} 
+					else if (container.direction === 'rotationLeft' ) {
+						container.angle = Math.PI / 2 * (timestamp - container.time)
+						container.rotation = - Math.PI / 2 - container.angle / 1000
+
+						if ((Math.PI / 2 + container.angle / 1000) > Math.PI ) {
+							container.rotation = - Math.PI
+							container.direction = 'left'
+							container.time = timestamp
+						}
+					}
+					else if (container.direction === 'left') {
+						container.x = renderer.canvas.width - halfSize - (timestamp - container.time) / 5
+
+						if (container.x <= halfSize) {
+							container.time = timestamp
+							container.direction = 'rotationUp'
+						}
+					}
+					else if (container.direction === 'rotationUp' ) {
+						container.angle = Math.PI / 2 * (timestamp - container.time)
+						container.rotation = - Math.PI - container.angle / 1000
+						if ((Math.PI + container.angle / 1000) > Math.PI * 1.5 ) {
+							container.rotation = - Math.PI * 1.5
+							container.direction = 'up'
+							container.time = timestamp
+						}
+					}
+					else if (container.direction === 'up') {
+						container.y = renderer.canvas.height - halfSize - (timestamp - container.time) / 5
+
+						if (container.y < halfSize) {
+							container.time = timestamp
+							container.direction = 'rotationRight'
+						}
+					}
+					else if (container.direction === 'rotationRight' ) {
+						container.angle = Math.PI / 2 * (timestamp - container.time)
+						container.rotation = - Math.PI * 1.5 - container.angle / 1000
+
+						if ((Math.PI * 1.5 + container.angle / 1000) > Math.PI * 2 ) {
+							container.rotation = 0
+							container.direction = 'right'
+							container.time = timestamp
+						}
+					}
+				}
+
 			}
 		})
 
 		document.body.append(renderer.canvas)
 
-		loader.addImage('animal', 'static/animal.jpg')
-		loader.addImage('monkey', 'static/monkey.jpg')
-		loader.addJson('persons', 'static/persons.json')
-		loader.addJson('animals', 'static/animals.json')
+		loader.addImage('tank', 'static/tank.jpg')
+		loader.addImage('bullet', 'static/bullet.jpg')
+		loader.addImage('background', 'static/background.png')
+		loader.addImage('enemy', 'static/enemy.jpg')
 
 
 		loader.load(() => {
 			// выводим изображения на страницу
 			// стартовая инициализация спрайта
-			sprite1 = new Sprite(loader.getImage('animal'), {
-				// x: renderer.canvas.width / 2,
-				x: 100,
-				y: 200,
-				// y: renderer.canvas.height / 2,
-				// rotation: Math.PI / 2,
-				scale: 0.25,
+			spriteTank = new Sprite(loader.getImage('tank'), {
+				x: 0,
+				y: 0,
+				scale: 1,
 				anchorX: 0.5,
 				anchorY: 0.5
 			})
 
-			sprite2 = new Sprite(loader.getImage('monkey'), {
-				// x: renderer.canvas.width / 2,
-				x: 400,
-				y: 200,
-				// y: renderer.canvas.height / 2,
-				// rotation: Math.PI / 2,
-				scale: 0.25,
+			spriteEnemy = new Sprite(loader.getImage('enemy'), {
+				x: 0,
+				y: 0,
+				scale: 1,
 				anchorX: 0.5,
 				anchorY: 0.5
+			})
+
+			spriteBullet = new Sprite(loader.getImage('bullet'), {
+				x: 200,
+				y: 0,
+				scale: 0.8,
+				anchorX: 0.5,
+				anchorY: 0.5
+			})
+
+			spriteBackground = new Sprite(loader.getImage('background'), {
+				x: 0,
+				y: 0,
+				scale: 1.27,
 			})
 
 			container = new Container()
-			container.x = 100
-			container.y = 100
-			// container.rotation = Math.PI / 4
-			container.anchorX = 0.5
-			container.anchorY = 0.5
-			container.width = renderer.canvas.width
-			container.height = renderer.canvas.height
+			container.x = 30
+			container.y = 30
+			container.height = 60
+
+			containerEnemy = new Container()
+			containerEnemy.x = 1900
+			containerEnemy.y = 30
+			containerEnemy.height = 60
+
+			const background = new Container()
+			background.x = container.height 
+			background.y = container.height
+			background.width = renderer.canvas.width - background.x
+			background.height = renderer.canvas.height - background.y
 
 			renderer.stage.add(container)
-			container.add(sprite1)
-			container.add(sprite2)
+			renderer.stage.add(containerEnemy)
+			renderer.stage.add(background)
 
-			// задаём точку позиционирования
-			// sprite.absoluteX = 0
-			// sprite.absoluteY = 0
-
-			// monkey = new Sprite(loader.getImage('monkey'), {
-			// 	scale: 0.25,
-			// 	anchorX: 0.5,
-			// 	anchorY: 0.5
-			// })
-
-			// container.add(monkey)
-
-			// monkey.absoluteX = 50
-			// monkey.absoluteY = 50
+			container.add(spriteBullet)
+			container.add(spriteTank)
+			containerEnemy.add(spriteEnemy)
+			background.add(spriteBackground)
 
 		})
 
