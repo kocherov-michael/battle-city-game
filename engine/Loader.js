@@ -23,6 +23,14 @@
 			this.loadOrder.jsons.push({ name, address })
 		}
 
+		getImage (name) {
+			return this.resources.images[name]
+		}
+
+		getJson (name) {
+			return this.resources.jsons[name]
+		}
+
 		// загрузка изображений
 		load (callback) {
 			const promises = []
