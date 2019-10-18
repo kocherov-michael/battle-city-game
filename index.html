@@ -74,47 +74,46 @@
 				container.x = (timestamp - container.time) / 5 + halfSize
 				
 				if (container.x >= renderer.canvas.width - halfSize) {
-				       container.time = timestamp //container.direction = 'rotationDown'
-					rotateTank('down')//container.time = timestamp
-                                        //rotateTank('down')
+				       container.direction = 'rotationDown'
+					container.time = timestamp
 				}
 			}
-			//else if (container.direction === 'rotationDown') {
-				//rotateTank('down')
-			//}
+			else if (container.direction === 'rotationDown') {
+				rotateTank('down')
+			}
 			else if (container.direction === 'down') {
 				container.y = (timestamp - container.time) / 5 + halfSize
 
 				if (container.y >= renderer.canvas.height - halfSize) {
 					container.time = timestamp
-					rotateTank('left')//container.direction = 'rotationLeft'
+					container.direction = 'rotationLeft'
 				}
 			} 
-			//else if (container.direction === 'rotationLeft' ) {
-				//rotateTank('left')
-			//}
+			else if (container.direction === 'rotationLeft' ) {
+				rotateTank('left')
+			}
 			else if (container.direction === 'left') {
 				container.x = renderer.canvas.width - halfSize - (timestamp - container.time) / 5
 
 				if (container.x <= halfSize) {
 					container.time = timestamp
-					rotateTank('up')//container.direction = 'rotationUp'
+					container.direction = 'rotationUp'
 				}
 			}
-			//else if (container.direction === 'rotationUp' ) {
-				//rotateTank('up')
-			//}
+			else if (container.direction === 'rotationUp' ) {
+				rotateTank('up')
+			}
 			else if (container.direction === 'up') {
 				container.y = renderer.canvas.height - halfSize - (timestamp - container.time) / 5
 
 				if (container.y <= halfSize) {
 					container.time = timestamp
-					rotateTank('right')//container.direction = 'rotationRight'
+					container.direction = 'rotationRight'
 				}
 			}
-			//else if (container.direction === 'rotationRight' ) {
-				//rotateTank('right')
-			//}
+			else if (container.direction === 'rotationRight' ) {
+				rotateTank('right')
+			}
 
 			// поворачиваем танк
 			function rotateTank (direction) {
