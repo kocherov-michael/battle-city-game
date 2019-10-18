@@ -74,13 +74,14 @@
 				container.x = (timestamp - container.time) / 5 + halfSize
 				
 				if (container.x >= renderer.canvas.width - halfSize) {
-					container.direction = 'rotationDown'
+				       // container.direction = 'rotationDown'
 					container.time = timestamp
+                                        rotateTank('down')
 				}
 			}
-			else if (container.direction === 'rotationDown') {
-				rotateTank('down')
-			}
+			//else if (container.direction === 'rotationDown') {
+				//rotateTank('down')
+			//}
 			else if (container.direction === 'down') {
 				container.y = (timestamp - container.time) / 5 + halfSize
 
