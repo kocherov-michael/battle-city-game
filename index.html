@@ -23,6 +23,8 @@
 		let container = null
 		let containerEnemy = null
 		let spriteBackground = null
+		let spriteStar = null
+		let spriteEagle = null
 
 		const loader = new Loader
 		const renderer = new Renderer({
@@ -31,7 +33,7 @@
 			background : 'black',
 
 			update (timestamp) {
-				if (!spriteTank || !spriteEnemy || !spriteBullet) {
+				if (!spriteTank || !spriteEnemy || !spriteBullet || !spriteStar || !spriteEagle) {
 					return
 				}
 
@@ -39,13 +41,20 @@
 				moveTanks(containerEnemy, timestamp)
 
 				// движение пули
-				if ( spriteBullet.x < renderer.canvas.width * 2) {
+				if ( spriteBullet.x < renderer.canvas.width ) {
 					spriteBullet.limit = spriteBullet.limit || 0
 					spriteBullet.x = (timestamp - spriteBullet.limit) /2
 				} else {
 					spriteBullet.limit = timestamp
 					spriteBullet.x = 0
 				}
+
+				// вращение орла
+				spriteEagle.rotation = Math.PI / 2 * timestamp / 1000
+
+				// мерцание звезды
+				spriteStar.scaleX = Math.cos(timestamp / 200)
+				spriteStar.scaleY = Math.cos(timestamp / 200)
 
 				// движение контейнеров танков
 				function moveTanks(container, timestamp) {
@@ -135,6 +144,8 @@
 		loader.addImage('bullet', 'static/bullet.jpg')
 		loader.addImage('background', 'static/background.png')
 		loader.addImage('enemy', 'static/enemy.jpg')
+		loader.addImage('star', 'static/star.jpg')
+		loader.addImage('eagle', 'static/eagle.jpg')
 
 
 		loader.load(() => {
@@ -170,15 +181,41 @@
 				scale: 1.27,
 			})
 
+			spriteStar = new Sprite(loader.getImage('star'), {
+				x: 0,
+				y: 0,
+				scale: 1,
+				anchorX: 0.5,
+				anchorY: 0.5
+			})
+
+			spriteEagle = new Sprite(loader.getImage('eagle'), {
+				x: 0,
+				y: 0,
+				scale: 1,
+				anchorX: -1,
+				anchorY: 0.5,
+				rotation: Math.PI /2
+			})
+
+			// контейнер танка и пули
 			container = new Container()
 			container.x = 30
 			container.y = 30
 			container.height = 60
 
+			// контейнер ражеского танка
 			containerEnemy = new Container()
 			containerEnemy.x = 1900
 			containerEnemy.y = 30
 			containerEnemy.height = 60
+
+			// контейнер для орла и звезды
+			const containerEagle = new Container()
+			containerEagle.x = renderer.canvas.width / 2
+			containerEagle.y = renderer.canvas.height / 2
+			containerEagle.anchorX = 0
+			containerEagle.anchorY = 0
 
 			const background = new Container()
 			background.x = container.height 
@@ -189,11 +226,14 @@
 			renderer.stage.add(container)
 			renderer.stage.add(containerEnemy)
 			renderer.stage.add(background)
+			renderer.stage.add(containerEagle)
 
 			container.add(spriteBullet)
 			container.add(spriteTank)
 			containerEnemy.add(spriteEnemy)
 			background.add(spriteBackground)
+			containerEagle.add(spriteEagle)
+			containerEagle.add(spriteStar)
 
 		})
 
