@@ -6,7 +6,7 @@
             super()
 
             this.autoStart = args.autoStart || false
-            this.name = args.name || ''
+						this.name = args.name || ''
 
             this.status = 'waiting'
             this.stage = this.displayObjects
