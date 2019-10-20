@@ -90,11 +90,11 @@ const tankScene = new Scene({
 			scale: 1,
 			anchorX: 0.5,
 			anchorY: 0.5,
-			x: 30,
-			y: 30,
+			x: 25,
+			y: 25,
 			// width: this.parent.renderer.canvas.width,
 			// height: this.parent.renderer.canvas.height,
-			debug: true,
+			debug: false,
 			body: {
 				x: 0,
 				y: 0,
@@ -154,8 +154,7 @@ const tankScene = new Scene({
 		]
 
 		for (let i = 0; i < wallPosition.length; i++) {
-			addWall(wallPosition[i].x-22, wallPosition[i].y -22, this)
-			console.log(wallPosition[i])
+			addWall(wallPosition[i].x-22, wallPosition[i].y -25, this)
 		}
 
 		function addWall (xPosition, yPosition, scene) {

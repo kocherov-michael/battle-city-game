@@ -16,7 +16,6 @@
 
             document.body.addEventListener('keydown', function (event) {
 						keyboard.anyCode = true
-						console.log(event.code)
 							switch (event.code) {
 								case "ArrowUp":
 									keyboard.arrowUp = true
