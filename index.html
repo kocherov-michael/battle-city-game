@@ -1,234 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Battle city</title>
 </head>
 <body>
-	<script src="engine/DisplayObject.js"></script>
-	<script src="engine/Container.js"></script>
-	<script src="engine/Loader.js"></script>
-	<script src="engine/Renderer.js"></script>
-	<script src="engine/Sprite.js"></script>
-	<script>
-		
-		// вытаскиваем классы из GameEngine
-		const { Loader, Renderer, Sprite, Container } = GameEngine
+    <script src="engine/DisplayObject.js"></script>
+    <script src="engine/Container.js"></script>
+    <script src="engine/Loader.js"></script>
+    <script src="engine/Renderer.js"></script>
+    <script src="engine/Sprite.js"></script>
+    <script src="engine/Scene.js"></script>
+    <script src="engine/Mouse.js"></script>
+    <script src="engine/Keyboard.js"></script>
+    <script src="engine/Point.js"></script>
+    <script src="engine/Line.js"></script>
+    <script src="engine/Body.js"></script>
+    <script src="engine/Game.js"></script>
 
-		let spriteTank = null
-		let spriteEnemy = null
-		let spriteBullet = null
-		let container = null
-		let containerEnemy = null
-		let spriteBackground = null
-		let spriteStar = null
-		let spriteEagle = null
-
-		const loader = new Loader
-		const renderer = new Renderer({
-			width: 500,
-			height: 500,
-			background : 'black',
-
-			update (timestamp) {
-				if (!spriteTank || !spriteEnemy || !spriteBullet || !spriteStar || !spriteEagle) {
-					return
-				}
-
-				// движение контейнеров танков
-				moveTanks(container, timestamp)
-				moveTanks(containerEnemy, timestamp)
-
-				// движение пули
-				if ( spriteBullet.x < renderer.canvas.width ) {
-					spriteBullet.limit = spriteBullet.limit || 0
-					spriteBullet.x = (timestamp - spriteBullet.limit) /2
-				} else {
-					spriteBullet.limit = timestamp
-					spriteBullet.x = 0
-				}
-
-				// вращение орла
-				spriteEagle.rotation = Math.PI / 2 * timestamp / 1000
-
-				// мерцание звезды
-				spriteStar.scaleX = Math.cos(timestamp / 200)
-				spriteStar.scaleY = Math.cos(timestamp / 200)
-			}
-		})
-
-		// движение контейнеров танков
-		function moveTanks(container, timestamp) {
-			//направление движения
-			container.direction = container.direction || 'right'
-			// засекаем время, в которое произошло действие
-			container.time = container.time || - container.x * 3
-			// отступ - половина контейнера
-			const halfSize = container.height / 2
-			// запоминаем угол поворота танка
-			container.angleSize = container.angleSize || 0
-
-			if (container.direction === 'right') {
-				container.x = (timestamp - container.time) / 5 + halfSize
-				
-				if (container.x >= renderer.canvas.width - halfSize) {
-				       container.direction = 'rotationDown'
-					container.time = timestamp
-				}
-			}
-			else if (container.direction === 'rotationDown') {
-				rotateTank('down')
-			}
-			else if (container.direction === 'down') {
-				container.y = (timestamp - container.time) / 5 + halfSize
-
-				if (container.y >= renderer.canvas.height - halfSize) {
-					container.time = timestamp
-					container.direction = 'rotationLeft'
-				}
-			} 
-			else if (container.direction === 'rotationLeft' ) {
-				rotateTank('left')
-			}
-			else if (container.direction === 'left') {
-				container.x = renderer.canvas.width - halfSize - (timestamp - container.time) / 5
-
-				if (container.x <= halfSize) {
-					container.time = timestamp
-					container.direction = 'rotationUp'
-				}
-			}
-			else if (container.direction === 'rotationUp' ) {
-				rotateTank('up')
-			}
-			else if (container.direction === 'up') {
-				container.y = renderer.canvas.height - halfSize - (timestamp - container.time) / 5
-
-				if (container.y <= halfSize) {
-					container.time = timestamp
-					container.direction = 'rotationRight'
-				}
-			}
-			else if (container.direction === 'rotationRight' ) {
-				rotateTank('right')
-			}
-
-			// поворачиваем танк
-			function rotateTank (direction) {
-				container.angle = Math.PI / 2 * (timestamp - container.time) 
-				container.rotation = container.angleSize - container.angle / 500
-
-				if (container.angle / 500 > Math.PI / 2) {
-					container.rotation = container.angleSize - Math.PI / 2
-					container.angleSize = container.rotation
-					container.direction = direction
-					container.time = timestamp
-				}
-			}
-
-		}
-
-		document.body.append(renderer.canvas)
-
-		loader.addImage('tank', 'static/tank.jpg')
-		loader.addImage('bullet', 'static/bullet.jpg')
-		loader.addImage('background', 'static/background.png')
-		loader.addImage('enemy', 'static/enemy.jpg')
-		loader.addImage('star', 'static/star.jpg')
-		loader.addImage('eagle', 'static/eagle.jpg')
-
-
-		loader.load(() => {
-			// выводим изображения на страницу
-			// стартовая инициализация спрайта
-			spriteTank = new Sprite(loader.getImage('tank'), {
-				x: 0,
-				y: 0,
-				scale: 1,
-				anchorX: 0.5,
-				anchorY: 0.5
-			})
-
-			spriteEnemy = new Sprite(loader.getImage('enemy'), {
-				x: 0,
-				y: 0,
-				scale: 1,
-				anchorX: 0.5,
-				anchorY: 0.5
-			})
-
-			spriteBullet = new Sprite(loader.getImage('bullet'), {
-				x: 0,
-				y: 0,
-				scale: 0.8,
-				anchorX: 0.5,
-				anchorY: 0.5
-			})
-
-			spriteBackground = new Sprite(loader.getImage('background'), {
-				x: 0,
-				y: 0,
-				scale: 1.27,
-			})
-
-			spriteStar = new Sprite(loader.getImage('star'), {
-				x: 0,
-				y: 0,
-				scale: 1,
-				anchorX: 0.5,
-				anchorY: 0.5
-			})
-
-			spriteEagle = new Sprite(loader.getImage('eagle'), {
-				x: 0,
-				y: 0,
-				scale: 1,
-				anchorX: -1,
-				anchorY: 0.5,
-				rotation: Math.PI /2
-			})
-
-			// контейнер танка и пули
-			container = new Container()
-			container.x = 30
-			container.y = 30
-			container.height = 60
-
-			// контейнер ражеского танка
-			containerEnemy = new Container()
-			containerEnemy.x = 400
-			containerEnemy.y = 30
-			containerEnemy.height = 60
-
-			// контейнер для орла и звезды
-			const containerEagle = new Container()
-			containerEagle.x = renderer.canvas.width / 2
-			containerEagle.y = renderer.canvas.height / 2
-			containerEagle.anchorX = 0
-			containerEagle.anchorY = 0
-
-			const background = new Container()
-			background.x = container.height 
-			background.y = container.height
-			background.width = renderer.canvas.width - background.x
-			background.height = renderer.canvas.height - background.y
-
-			renderer.stage.add(container)
-			renderer.stage.add(containerEnemy)
-			renderer.stage.add(background)
-			renderer.stage.add(containerEagle)
-
-			container.add(spriteBullet)
-			container.add(spriteTank)
-			containerEnemy.add(spriteEnemy)
-			background.add(spriteBackground)
-			containerEagle.add(spriteEagle)
-			containerEagle.add(spriteStar)
-
-		})
-
-	</script>
+    <script src="game/index.js"></script>
 </body>
 </html>

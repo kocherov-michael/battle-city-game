@@ -1,72 +1,72 @@
 ;(function () {
-	'use strict'
+    'use strict'
 
-	class DisplayObject {
-		constructor (args = {}) {
-			this.x = args.x || 0
-			this.y = args.y || 0
-			this.width = args.width || 0
-			this.height = args.height || 0
+    class DisplayObject {
+        constructor (args = {}) {
+            this.x = args.x || 0
+            this.y = args.y || 0
 
-			this.rotation = args.rotation || 0
+            this.width = args.width || 0
+            this.height = args.height || 0
 
-			// задаём координаты якоря изображения
-			this.anchorX = args.anchorX || 0
-			this.anchorY = args.anchorY || 0
+            this.rotation = args.rotation || 0
 
-			this.scale = args.scale || 1
-			this.scaleX = args.scaleX || 1
-			this.scaleY = args.scaleY || 1
+            this.anchorX = args.anchorX || 0
+            this.anchorY = args.anchorY || 0
 
-			this.parent = null
+            this.scaleX = args.scaleX || 1
+            this.scaleY = args.scaleY || 1
 
-			if (args.scale !== undefined) {
-				this.setScale(args.scale)
-			}
-		}
+            this.parent = null
+            this.visible = true
 
-		// получаем абсолютные значения положения изображения
-		// для позиционирования по якорю
-		get absoluteX () {
-			return this.x - this.anchorX * this.width
-		}
+            if (args.scale !== undefined) {
+                this.setScale(args.scale)
+            }
+        }
 
-		set absoluteX (value) {
-			this.x = value + this.anchorX * this.width
-			return value
-		}
-		
-		get absoluteY () {
-			return this.y - this.anchorY * this.height
-		}
-		
-		set absoluteY (value) {
-			this.y = value + this.anchorY * this.height
-			return value
-		}
+        get absoluteX () {
+            return this.x - this.anchorX * this.width
+        }
 
-		// устанавливаем масштаб для обоих осей
-		setScale (scale) {
-			this.scaleX = scale
-			this.scaleY = scale
-		}
+        set absoluteX (value) {
+            this.x = value + this.anchorX * this.width
+            return value
+        }
+        
+        get absoluteY () {
+            return this.y - this.anchorY * this.height
+        }
+        
+        set absoluteY (value) {
+            this.y = value + this.anchorY * this.height
+            return value
+        }
 
-		setParent (parent) {
-			if (this.parent) {
-				this.parent.remove(this)
-			}
-			if (parent) {
-				parent.add(this)
-				this.parent = parent
-			}
-		}
+        setScale (scale) {
+            this.scaleX = scale
+            this.scaleY = scale
+        }
 
-		draw () {}
-	}
+        setParent (parent) {
+            if (this.parent && this.parent.remove) {
+                this.parent.remove(this)
+            }
 
+            if (parent && parent.add) {
+                parent.add(this)
+            }
+            
+            this.parent = parent
+        }
 
+        draw (callback) {
+            if (this.visible) {
+                callback()
+            }
+        }
+    }
 
-
-	window.GameEngine = window.GameEngine || {}
-	window.GameEngine.DisplayObject = DisplayObject
+    window.GameEngine = window.GameEngine || {}
+    window.GameEngine.DisplayObject = DisplayObject
 })();
