@@ -8,12 +8,19 @@
             this.displayObjects = []
         }
 
-				// принимаем любое количество переменных и превращаем их в массив
         add (...displayObjects) {
             for (const displayObject of displayObjects) {
                 if (!this.displayObjects.includes(displayObject)) {
                     this.displayObjects.push(displayObject)
                     displayObject.setParent(this)
+                }
+            }
+        }
+
+        tick (timestamp) {
+            for (const displayObject of this.displayObjects) {
+                if (displayObject.tick) {
+                    displayObject.tick(timestamp)
                 }
             }
         }
