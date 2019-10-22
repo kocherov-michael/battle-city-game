@@ -1,6 +1,7 @@
 ;(function () {
     'use strict'
 
+		// генерирует события
     class EventEmitter {
         constructor () {
             this.handlers = {}

@@ -82,7 +82,7 @@
                     }
 
                     if (crossing) {
-                        console.log(a, b)
+                        // console.log(a, b)
                         a.emit('collision', a, b)
                         b.emit('collision', b, a)
                     }

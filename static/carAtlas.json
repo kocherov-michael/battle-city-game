@@ -1,0 +1,19 @@
+{
+	"actions": {
+			"stayDown": {
+					"keys": [
+							["car", "down", "frame1"]
+					]
+			}
+	},
+	"frames": [
+			{
+					"keys": ["car", "down", "frame1"],
+					"x": 0,
+					"y": 0,
+					"width": 50,
+					"height": 100
+			}
+			
+	]
+}

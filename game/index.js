@@ -1,6 +1,6 @@
 const DEBUG_MODE = true
 
-const { Body, Game, Scene, ArcadePhysics, Util } = GameEngine
+const { Body, Game, Scene, ArcadePhysics, Util, Point } = GameEngine
 
 const mainScene = new Scene({
     name: 'mainScene',
@@ -8,99 +8,192 @@ const mainScene = new Scene({
 
     loading (loader) {
         loader.addImage('spriteSheet', 'static/Battle City Sprites.png')
+        loader.addImage('road', 'static/road.png')
+        loader.addImage('carOrange', 'static/carOrange.png')
+        loader.addImage('carBlue', 'static/carBlue.png')
         loader.addJson('atlas', 'static/atlas.json')
+        loader.addJson('carAtlas', 'static/carAtlas.json')
     },
 
     init () {
-        Tank.texture = this.parent.loader.getImage('spriteSheet')
-        Tank.atlas = this.parent.loader.getJson('atlas')
+		const roadTexture = this.parent.loader.getImage('road')
+		const carBlueTexture = this.parent.loader.getImage('carBlue')
 
-        Bullet.texture = this.parent.loader.getImage('spriteSheet')
-        Bullet.atlas = this.parent.loader.getJson('atlas')
+		Car.texture = this.parent.loader.getImage('carOrange')
+		Car.atlas = this.parent.loader.getJson('carAtlas')
 
-        this.arcadePhysics = new ArcadePhysics
+        // Tank.texture = this.parent.loader.getImage('spriteSheet')
+        // Tank.atlas = this.parent.loader.getJson('atlas')
 
-        this.tank1 = new Tank({
-            debug: DEBUG_MODE,
-            x: this.parent.renderer.canvas.width / 2,
-            y: this.parent.renderer.canvas.height / 2 + 100,
+        // Bullet.texture = this.parent.loader.getImage('spriteSheet')
+        // Bullet.atlas = this.parent.loader.getJson('atlas')
+
+		this.arcadePhysics = new ArcadePhysics
+
+		this.road = new Body(roadTexture,{
+            x: 0,
+            y: 0,
+		})
+		
+		this.road2 = new Body(roadTexture,{
+            x: 0,
+            y: 0 - this.parent.renderer.canvas.height,
         })
-
-        this.tank2 = new Tank({
-            debug: DEBUG_MODE,
+		
+		this.carOrange = new Car({
             x: this.parent.renderer.canvas.width / 2,
-            y: this.parent.renderer.canvas.height / 2,
-        })
+            y: this.parent.renderer.canvas.height - 100,
+		})
+		
+		const competitors = [
+			{x: 135, y: 100},
 
-        this.add(this.tank1, this.tank2)
-        this.arcadePhysics.add(this.tank1, this.tank2)
+			{x: 210, y: -1100},
+			{x: 210, y: -13000},
+			{x: 210, y: -2100},
+			{x: 210, y: -3100},
+			{x: 210, y: -4100},
 
-        this.arcadePhysics.add(new Body(null, {
-            static: true,
-            x: -10,
-            y: -10,
-            width: this.parent.renderer.canvas.width + 20,
-            height: 10
-        }))
+			{x: 290, y: -100},
+			{x: 290, y: -3000},
+			{x: 290, y: -10000},
 
-        this.arcadePhysics.add(new Body(null, {
-            static: true,
-            x: -10,
-            y: -10,
-            width: 10,
-            height: this.parent.renderer.canvas.height + 20
-				}))
+			{x: 365, y: -5000},
+			{x: 365, y: 400}
+		]
+
+		
+
+        // this.tank1 = new Tank({
+        //     debug: DEBUG_MODE,
+        //     x: this.parent.renderer.canvas.width / 2,
+        //     y: this.parent.renderer.canvas.height / 2 + 100,
+        // })
+
+        // this.tank2 = new Tank({
+        //     debug: DEBUG_MODE,
+        //     x: this.parent.renderer.canvas.width / 2,
+        //     y: this.parent.renderer.canvas.height / 2,
+		// })
+		
+		this.add(this.road, this.road2, this.carOrange)
+		this.arcadePhysics.add(this.carOrange)
+		this.competitorElements = []
+
+		for (let i = 0; i < competitors.length; i++) {
+			this.competitor = new Body(carBlueTexture,{
+				anchorX: 0.5,
+				anchorY: 0.5,
+				x: competitors[i].x,
+				y: competitors[i].y,
+			})
+			this.add(this.competitor)
+			this.arcadePhysics.add(this.competitor)
+			this.competitorElements.push(this.competitor)
+		}
+
+        // this.add(this.tank1, this.tank2, this.carOrange)
+        // this.arcadePhysics.add(this.tank1, this.tank2)
+
+        // this.arcadePhysics.add(new Body(null, {
+        //     static: true,
+        //     x: -10,
+        //     y: -10,
+        //     width: this.parent.renderer.canvas.width + 20,
+        //     height: 10
+        // }))
+
+        // this.arcadePhysics.add(new Body(null, {
+        //     static: true,
+        //     x: 80,
+        //     y: -10,
+        //     width: 10,
+        //     height: this.parent.renderer.canvas.height + 20
+		// 		}))
 				
-				this.arcadePhysics.add(new Body(null, {
-					static: true,
-					x: this.parent.renderer.canvas.width,
-					y: -10,
-					width: 10,
-					height: this.parent.renderer.canvas.height + 20
-				}))
+		this.arcadePhysics.add(new Body(null, {
+			static: true,
+			x: this.parent.renderer.canvas.width - 80,
+			y: -10,
+			width: 10,
+			height: this.parent.renderer.canvas.height + 20
+		}))
 
-				this.arcadePhysics.add(new Body(null, {
-					static: true,
-					x: -10,
-					y: this.parent.renderer.canvas.height,
-					width: this.parent.renderer.canvas.width + 20,
-					height: 10
-				}))
+		this.arcadePhysics.add(new Body(null, {
+			static: true,
+			x: -10,
+			y: this.parent.renderer.canvas.height,
+			width: this.parent.renderer.canvas.width + 20,
+			height: 10
+		}))
+
     },
 
-    update () {
-        const { keyboard } = this.parent
+    update (timestamp) {
+		const { keyboard } = this.parent
 
-        this.tank1.movementUpdate(keyboard)
+		for ( let i = 0; i < this.competitorElements.length; i++) {
+			this.competitorElements[i].y -= 10
+		}
 
-        if (keyboard.space && Util.delay('tank' + this.tank1.uid, Tank.BULLET_TIMEOUT)) {
-            const bullet = new Bullet({
-                debug: DEBUG_MODE,
-                x: this.tank1.x,
-                y: this.tank1.y
-            })
+		this.carOrange.movementUpdate(keyboard)	
+		this.road.speed = this.road.speed || 0
+		this.carOrange.roadSpeed = this.carOrange.roadSpeed || 0
 
-            this.tank1.bullets.push(bullet)
-            bullet.tank = this.tank1
+		if (keyboard.arrowUp) {
+			this.carOrange.roadSpeed += 1
+			
+		} else if (keyboard.arrowDown && this.carOrange.roadSpeed > 0) {
+			this.carOrange.roadSpeed -= 3
+		}
+		else if (this.carOrange.roadSpeed > 0) {
+			this.carOrange.roadSpeed -= 1
+		} else if ( this.carOrange.roadSpeed < 0) {
+			this.carOrange.roadSpeed = 0
+		}
 
-            if (this.tank1.animation === 'moveUp') {
-                bullet.velocity.y -= Bullet.NORMAL_SPEED
-                bullet.setFrameByKeys('bullet', 'up')
-            }
+		this.road.y += this.carOrange.roadSpeed / 3
+		this.road2.y += this.carOrange.roadSpeed / 3
+
+		for ( let i = 0; i < this.competitorElements.length; i++) {
+			this.competitorElements[i].y += this.carOrange.roadSpeed / 3
+		}
+
+		if (this.road.y > this.parent.renderer.canvas.width ) {
+			this.road.y = 0
+			this.road2.y = 0 - this.parent.renderer.canvas.width
+		}
+
+        // this.tank1.movementUpdate(keyboard)
+
+        // if (keyboard.space && Util.delay('tank' + this.tank1.uid, Tank.BULLET_TIMEOUT)) {
+        //     const bullet = new Bullet({
+        //         debug: DEBUG_MODE,
+        //         x: this.tank1.x,
+        //         y: this.tank1.y
+        //     })
+
+        //     this.tank1.bullets.push(bullet)
+        //     bullet.tank = this.tank1
+
+        //     if (this.tank1.animation === 'moveUp') {
+        //         bullet.velocity.y -= Bullet.NORMAL_SPEED
+        //         bullet.setFrameByKeys('bullet', 'up')
+        //     }
             
-            this.add(bullet)
-            this.arcadePhysics.add(bullet)
-        }
+        //     this.add(bullet)
+        //     this.arcadePhysics.add(bullet)
+        // }
 
         this.arcadePhysics.processing()
 
-        for (const tank of [this.tank1, this.tank2]) {
-            for (const bullet of tank.bullets) {
-                if (bullet.toDestroy) {
-                    bullet.destroy()
-                }
-            }
-        }
+        // for (const tank of [this.tank1, this.tank2]) {
+        //     for (const bullet of tank.bullets) {
+        //         if (bullet.toDestroy) {
+        //             bullet.destroy()
+        //         }
+        //     }
+        // }
     }
 
     // init () {
