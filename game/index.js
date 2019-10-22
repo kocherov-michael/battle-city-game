@@ -2,9 +2,40 @@ const DEBUG_MODE = true
 
 const { Body, Game, Scene, ArcadePhysics, Util, Point } = GameEngine
 
+const beginScene = new Scene({
+	name: 'beginScene',
+	autoStart: true,
+	loading (loader) {
+		loader.addImage('race', 'static/race.png')
+	},
+
+	init () {
+		const startTexture = this.parent.loader.getImage('race')
+
+		this.start = new Body(startTexture, {
+			anchorX: 0.5,
+			anchorY: 0.5,
+			x: this.parent.renderer.canvas.width / 2,
+			y: this.parent.renderer.canvas.height / 2,
+			width: this.parent.renderer.canvas.width,
+			height: this.parent.renderer.canvas.height,
+			debug: false,
+		})
+		this.add(this.start)
+	},
+
+	update () {
+		const { keyboard } = this.parent
+		if (keyboard.space || keyboard.enter) {
+			game.finishScene(beginScene)
+			game.startScene(mainScene)
+		}
+	}
+})
+
 const mainScene = new Scene({
     name: 'mainScene',
-    autoStart: true,
+    // autoStart: true,
 
     loading (loader) {
         loader.addImage('spriteSheet', 'static/Battle City Sprites.png')
@@ -256,5 +287,5 @@ const game = new Game({
     width: 500,
     height: 500,
     background: 'gray',
-    scenes: [mainScene]
+    scenes: [beginScene, mainScene]
 })

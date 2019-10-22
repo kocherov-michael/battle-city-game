@@ -31,6 +31,10 @@
 
                     case "Space":
                         keyboard.space = true
+												break
+										
+										case "Enter":
+                        keyboard.enter = true
                         break
                 }
             })
@@ -55,7 +59,11 @@
 
                     case "Space":
                         keyboard.space = false
-                        break
+												break
+												
+										case "Enter":
+												keyboard.enter = false
+												break
                 }
             })
         }
