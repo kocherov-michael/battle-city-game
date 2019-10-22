@@ -103,13 +103,13 @@ const mainScene = new Scene({
         //     height: 10
         // }))
 
-        // this.arcadePhysics.add(new Body(null, {
-        //     static: true,
-        //     x: 80,
-        //     y: -10,
-        //     width: 10,
-        //     height: this.parent.renderer.canvas.height + 20
-		// 		}))
+         this.arcadePhysics.add(new Body(null, {
+             static: true,
+             x: 80,
+             y: -10,
+             width: 10,
+             height: this.parent.renderer.canvas.height + 20
+		 		}))
 				
 		this.arcadePhysics.add(new Body(null, {
 			static: true,
@@ -119,13 +119,13 @@ const mainScene = new Scene({
 			height: this.parent.renderer.canvas.height + 20
 		}))
 
-		this.arcadePhysics.add(new Body(null, {
-			static: true,
-			x: -10,
-			y: this.parent.renderer.canvas.height,
-			width: this.parent.renderer.canvas.width + 20,
-			height: 10
-		}))
+		// this.arcadePhysics.add(new Body(null, {
+		// 	static: true,
+		//	x: -10,
+		//	y: this.parent.renderer.canvas.height,
+		//	width: this.parent.renderer.canvas.width + 20,
+		//	height: 10
+		// }))
 
     },
 
