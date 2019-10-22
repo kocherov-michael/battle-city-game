@@ -78,6 +78,7 @@ const mainScene = new Scene({
 			this.competitorElements.push(this.competitor)
 		}
 
+
 		// this.add(this.tank1, this.tank2, this.carOrange)
 		// this.arcadePhysics.add(this.tank1, this.tank2)
 
@@ -96,6 +97,7 @@ const mainScene = new Scene({
 				width: 10,
 				height: this.parent.renderer.canvas.height + 20
 		}))
+
 				
 		this.arcadePhysics.add(new Body(null, {
 			static: true,
@@ -107,6 +109,7 @@ const mainScene = new Scene({
 
 		// this.arcadePhysics.add(new Body(null, {
 		// 	static: true,
+
 		// 	x: -10,
 		// 	y: this.parent.renderer.canvas.height,
 		// 	width: this.parent.renderer.canvas.width + 20,
@@ -116,6 +119,7 @@ const mainScene = new Scene({
 		function getRandom(min, max) {
 			return Math.floor(Math.random() * (max + 1 - min)) + min;
 		}
+
 
     },
 
