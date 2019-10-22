@@ -44,72 +44,60 @@ const mainScene = new Scene({
             x: this.parent.renderer.canvas.width / 2,
             y: this.parent.renderer.canvas.height - 100,
 		})
-		
-		const competitors = [
-			{x: 135, y: 100},
-
-			{x: 210, y: -1100},
-			{x: 210, y: -13000},
-			{x: 210, y: -2100},
-			{x: 210, y: -3100},
-			{x: 210, y: -4100},
-
-			{x: 290, y: -100},
-			{x: 290, y: -3000},
-			{x: 290, y: -10000},
-
-			{x: 365, y: -5000},
-			{x: 365, y: 400}
-		]
 
 		
-
-        // this.tank1 = new Tank({
-        //     debug: DEBUG_MODE,
-        //     x: this.parent.renderer.canvas.width / 2,
-        //     y: this.parent.renderer.canvas.height / 2 + 100,
-        // })
-
-        // this.tank2 = new Tank({
-        //     debug: DEBUG_MODE,
-        //     x: this.parent.renderer.canvas.width / 2,
-        //     y: this.parent.renderer.canvas.height / 2,
+		// this.tank1 = new Tank({
+			//     debug: DEBUG_MODE,
+			//     x: this.parent.renderer.canvas.width / 2,
+			//     y: this.parent.renderer.canvas.height / 2 + 100,
+		// })
+			
+		// this.tank2 = new Tank({
+			//     debug: DEBUG_MODE,
+			//     x: this.parent.renderer.canvas.width / 2,
+			//     y: this.parent.renderer.canvas.height / 2,
 		// })
 		
 		this.add(this.road, this.road2, this.carOrange)
 		this.arcadePhysics.add(this.carOrange)
 		this.competitorElements = []
+		
+		const positionsX = [135, 210, 290, 365]
+		const positionsY = [150, 200, 250, 300, 350, 400, 450, 500]
 
-		for (let i = 0; i < competitors.length; i++) {
+		for (let i = 0, yPos = 200; i < 200; i++) {
 			this.competitor = new Body(carBlueTexture,{
 				anchorX: 0.5,
 				anchorY: 0.5,
-				x: competitors[i].x,
-				y: competitors[i].y,
+				x: positionsX[getRandom(0, 3)],
+				y: yPos
 			})
+			yPos -= positionsY[getRandom(0, 7)]
 			this.add(this.competitor)
 			this.arcadePhysics.add(this.competitor)
 			this.competitorElements.push(this.competitor)
 		}
 
-        // this.add(this.tank1, this.tank2, this.carOrange)
-        // this.arcadePhysics.add(this.tank1, this.tank2)
 
-        // this.arcadePhysics.add(new Body(null, {
-        //     static: true,
-        //     x: -10,
-        //     y: -10,
-        //     width: this.parent.renderer.canvas.width + 20,
-        //     height: 10
-        // }))
+		// this.add(this.tank1, this.tank2, this.carOrange)
+		// this.arcadePhysics.add(this.tank1, this.tank2)
 
-         this.arcadePhysics.add(new Body(null, {
-             static: true,
-             x: 80,
-             y: -10,
-             width: 10,
-             height: this.parent.renderer.canvas.height + 20
-		 		}))
+		// this.arcadePhysics.add(new Body(null, {
+		//     static: true,
+		//     x: -10,
+		//     y: -10,
+		//     width: this.parent.renderer.canvas.width + 20,
+		//     height: 10
+		// }))
+
+		this.arcadePhysics.add(new Body(null, {
+				static: true,
+				x: 80,
+				y: -10,
+				width: 10,
+				height: this.parent.renderer.canvas.height + 20
+		}))
+
 				
 		this.arcadePhysics.add(new Body(null, {
 			static: true,
@@ -121,11 +109,17 @@ const mainScene = new Scene({
 
 		// this.arcadePhysics.add(new Body(null, {
 		// 	static: true,
-		//	x: -10,
-		//	y: this.parent.renderer.canvas.height,
-		//	width: this.parent.renderer.canvas.width + 20,
-		//	height: 10
+
+		// 	x: -10,
+		// 	y: this.parent.renderer.canvas.height,
+		// 	width: this.parent.renderer.canvas.width + 20,
+		// 	height: 10
 		// }))
+
+		function getRandom(min, max) {
+			return Math.floor(Math.random() * (max + 1 - min)) + min;
+		}
+
 
     },
 
@@ -140,8 +134,8 @@ const mainScene = new Scene({
 		this.road.speed = this.road.speed || 0
 		this.carOrange.roadSpeed = this.carOrange.roadSpeed || 0
 
-		if (keyboard.arrowUp) {
-			this.carOrange.roadSpeed += 1
+		if (keyboard.arrowUp && this.carOrange.roadSpeed < 40) {
+			this.carOrange.roadSpeed += 1 
 			
 		} else if (keyboard.arrowDown && this.carOrange.roadSpeed > 0) {
 			this.carOrange.roadSpeed -= 3
