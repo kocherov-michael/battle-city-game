@@ -1,7 +1,6 @@
 ;(function () {
     'use strict'
 
-	// создаём точку
     class Point extends GameEngine.DisplayObject {
         constructor (args = {}) {
             super(args)

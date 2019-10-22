@@ -1,7 +1,6 @@
 ;(function () {
     'use strict'
-	
-	// создаём линию
+
     class Line extends GameEngine.DisplayObject {
         constructor (args = {}) {
             super(args)
