@@ -63,7 +63,7 @@ const mainScene = new Scene({
 		this.competitorElements = []
 		
 		const positionsX = [135, 210, 290, 365]
-		const positionsY = [150, 200, 250, 300, 350, 400, 450, 500]
+		const positionsY = [150, 200, 250, 300, 350, 400]
 
 		for (let i = 0, yPos = 200; i < 200; i++) {
 			this.competitor = new Body(carBlueTexture,{
@@ -72,7 +72,7 @@ const mainScene = new Scene({
 				x: positionsX[getRandom(0, 3)],
 				y: yPos
 			})
-			yPos -= positionsY[getRandom(0, 7)]
+			yPos -= positionsY[getRandom(0, 5)]
 			this.add(this.competitor)
 			this.arcadePhysics.add(this.competitor)
 			this.competitorElements.push(this.competitor)
@@ -138,10 +138,10 @@ const mainScene = new Scene({
 			this.carOrange.roadSpeed += 1 
 			
 		} else if (keyboard.arrowDown && this.carOrange.roadSpeed > 0) {
-			this.carOrange.roadSpeed -= 3
+			this.carOrange.roadSpeed -= 1
 		}
 		else if (this.carOrange.roadSpeed > 0) {
-			this.carOrange.roadSpeed -= 1
+			this.carOrange.roadSpeed -= 1 / 20
 		} else if ( this.carOrange.roadSpeed < 0) {
 			this.carOrange.roadSpeed = 0
 		}
